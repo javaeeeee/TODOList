@@ -1,0 +1,16 @@
+*~
+target
+.openshift
+*/.gitignore
+.gitkeep
+customs.json
+nbactions.xml
+nb-configuration.xml
+.classpath
+.project
+.settings
+.metadata
+bin
+*.log
+
+
