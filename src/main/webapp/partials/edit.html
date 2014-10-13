@@ -1,16 +1,7 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<h2>{{action}}</h2>
+<form ng-submit="saveItem()">
+    <p><input type="text" ng-model="name" placeholder="Task"/></p>
+    <p>Status: <select ng-model="status" ng-options="status for status in statuses"></select></p>
+    <p><button type="submit" >Save</button><a ui-sref="main">Cancel</a></p>
+    
+</form>
