@@ -39,12 +39,12 @@ angular.module('app', ['ui.router', 'ngResource'])
             });
         })
         //A factory with special methods for login and logout
-        .factory('service', function ($state, users) {
+        .factory('service', function ($state) {
             var logout = function () {
                 $state.go('login');
             };
             var getAuthenticatedUser = function (login, password) {
-                var users = users.users;
+
             };
             return {
                 logout: logout
@@ -55,7 +55,7 @@ angular.module('app', ['ui.router', 'ngResource'])
             return ['High', 'Medium', 'Low'];
         })
         //Controller of the main page
-        .controller('MainCtrl', function ($log, $scope, $state, service, Item) {
+        .controller('MainCtrl', function ($log, $scope, $state, $window, service, Item) {
             $scope.logout = service.logout;
             Item.query(function (items) {
                 $scope.items = items;
@@ -67,11 +67,13 @@ angular.module('app', ['ui.router', 'ngResource'])
                 $state.go('history');
             };
             $scope.deleteItem = function (id) {
-                Item.delete({id: id});
+                Item.delete({id: id},function(){
+                    $window.location.reload();
+                });
             };
         })
         //Controller of the login page
-        .controller('LoginCtrl', function ($log, $scope, $state, $resource, $http, users) {
+        .controller('LoginCtrl', function ($log, $scope, $state, $resource, $http) {
             //if($scope.login&&$scope.password)
             //TODO A temporary stub
             $scope.doLogin = function () {
@@ -98,16 +100,23 @@ angular.module('app', ['ui.router', 'ngResource'])
 
         })
         // Controller for adding items
-        .controller('AddCtrl', function ($log, $scope, $state, statuses, Item, users) {
+        .controller('AddCtrl', function ($log, $scope, $state, $resource, statuses, Item) {
             $scope.action = "Add Item";
             $scope.statuses = statuses;
             $scope.item = new Item();
             $scope.item.name = "dgdgdg";
-            $scope.item.userId = $scope.currentUser;
-            $log.debug(JSON.stringify($scope.currentUser));
+            //TODO a temporary stub
+            var User = $resource('api/user/:id', {id: '@id'});
+
             $scope.saveItem = function () {
-                Item.save($scope.item, function () {
-                    $state.go('main');
+                $log.debug('Saving an item');
+                User.get({id: 1}, function (user) {
+                    $scope.item.userId = user;
+                    Item.save($scope.item, function () {
+                        $state.go('main');
+                    });
+                }, function (reason) {
+                    $log.error('Failed to load users. Status ' + reason.status);
                 });
             };
         });
