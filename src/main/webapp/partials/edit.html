@@ -1,7 +1,6 @@
 <h2>{{action}}</h2>
 <form ng-submit="saveItem()">
-    <p><input type="text" ng-model="name" placeholder="Task"/></p>
-    <p>Status: <select ng-model="status" ng-options="status for status in statuses"></select></p>
+    <p><input type="text" ng-model="item.name" placeholder="Task"/></p>
+    <p>Status: <select  ng-options="status for status in statuses"></select></p><!--ng-model="item.status"-->
     <p><button type="submit" >Save</button><a ui-sref="main">Cancel</a></p>
-    
 </form>
